@@ -4,31 +4,53 @@
     <p>
       <button @click="handleBtnClick" type="button">Make pdf</button>
     </p>
+    <a href="http://localhost:3000/makepdf">click</a>
   </div>
 </template>
 
 <script>
-
-import axios from 'axios'
+import axios from "axios";
 
 export default {
-  name: 'app',
+  name: "app",
   data: () => {
     return {
-      msg: 'Client'
-    }
+      msg: "Client"
+    };
   },
   methods: {
     handleBtnClick: () => {
-      alert('clicked');
+      axios
+        .post(
+          "http://localhost:3000/makepdf",
+          {
+            hello: "bar"
+          },
+          {
+            headers: {
+              "Content-Type": "application/json"
+            },
+            responseType: "blob"
+          }
+        )
+        .then(response => {
+          var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+          var fileLink = document.createElement("a");
+
+          fileLink.href = fileURL;
+          fileLink.setAttribute("download", "file.pdf");
+          // document.body.appendChild(fileLink);
+
+          fileLink.click();
+        });
     }
   }
-}
+};
 </script>
 
 <style>
 button {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -39,7 +61,6 @@ button {
   background-color: #0000ff;
   color: white;
   border: 1px grey;
-  
 }
 
 button:hover {
@@ -50,7 +71,7 @@ button:hover {
 }
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
